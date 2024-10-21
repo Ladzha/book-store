@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import jsonwebtoken from "jsonwebtoken";
+import sequelize from './db/databaseConnection.js'
 import userRouter from "./routes/userRoutes.js";
 import bookRouter from "./routes/booksRoutes.js";
 import genreRouter from "./routes/genreRoutes.js";
@@ -13,6 +14,12 @@ dotenv.config();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(bodyParser.json())
+
+sequelize.sync(
+    // {force: true} //принудительное пересоздание таблиц
+)
+.then(()=>console.log("Database connected"))
 
 app.use('/users', userRouter)
 app.use('/books', bookRouter)

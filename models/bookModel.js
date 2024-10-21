@@ -1,20 +1,34 @@
-import { Sequelize, DataTypes } from 'sequelize';
-
-const sequelize = new Sequelize('sqlite::memory:');
+import { DataTypes } from 'sequelize';
+import sequelize from '../db/databaseConnection.js'
 
 const bookModel = sequelize.define("Book", {
     title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    author: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    price: {
+        type: DataTypes.NUMBER,
+        allowNull: false,
+        min: 0
+    },
+    genre: {
+        type: []
+    },
+    description: {
         type: DataTypes.STRING
+    },
+    stock: {
+        type: DataTypes.STRING,
+        min: 0
+    },
+    createdAt: {
+        type: DataTypes.DATE
     }
-})
 
-// id (уникальный идентификатор)
-// title (название книги)
-// author (автор)
-// price (цена)
-// genre (жанр)
-// description (описание)
-// stock (количество на складе)
-// createdAt (дата добавления)
+})
 
 export default bookModel

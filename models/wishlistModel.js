@@ -1,6 +1,6 @@
-import { Sequelize, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
+import sequelize from '../db/databaseConnection.js'
 
-const sequelize = new Sequelize('sqlite::memory:');
 
 const wishlistModel = sequelize.define("Wishlist", {
     userId: {
