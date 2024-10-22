@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/databaseConnection.js'
-
+import wishlistModel from './wishlistModel.js'
+import orderModel from './orderModel.js'
 
 const userModel = sequelize.define("User", {
     firstName: {
@@ -21,7 +22,13 @@ const userModel = sequelize.define("User", {
     password: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    }  
 })
+
+userModel.hasOne(wishlistModel)
+userModel.hasMany(orderModel)
+wishlistModel.belongsTo(userModel)
+orderModel.belongsTo(userModel)
+
 
 export default userModel

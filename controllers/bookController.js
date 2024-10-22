@@ -14,7 +14,7 @@ const getAllBooks = async (req, res) => {
 const getBookById = async (req, res) => {
     try {
         const id = req.params.id
-        if(!id) return errorHandler(res, 404, "ID not found")
+        if(!id) return errorHandler(res, 400, "Invalid ID")
         const book = await bookModel.findByPk(id)
         if(!book) return errorHandler(res, 404, `Book with ${id} not found`)
         res.status(200).json(book)
@@ -39,15 +39,25 @@ const createBook = async (req, res) => {
 
 const updateBook = async (req, res) => {
     try {
-        
+        const id = req.params.id
+        if(!id) return errorHandler(res, 400, "Invalid ID")
+        const data = req.body
+        if(!data) return errorHandler(res, 400, "Invalid data")
+        await bookModel.update(data, {where: {id : id}})
+        const updatedBook = await bookModel.findOne(data, {where: {id : id}})
+        if(!updatedBook) return errorHandler(res, 404, "Book not found")
+        res.status(200).json({
+            message: `Book with ID: ${id} successfully updated.`, 
+            book: updatedBook}); 
     } catch (error) {
-        
-    }
+        errorHandler(res, 400, "Failed to update book")
+    } 
 }
 
 const deleteBook = async (req, res) => {
     try {
         const id = req.params.id
+        if(!id) return errorHandler(res, 400, "Invalid ID")
         const deletedBook = bookModel.destroy({where: {id: id}})
         res.status(200).json({
             message: `Book with ID: ${id} successfully deleted.`,
@@ -79,6 +89,7 @@ const findBooksByAuthor = async (req, res) => {
         errorHandler(res, 500, "Failed to fetch books")
     }
 }
+
 
 
 export default { getAllBooks, getBookById, createBook, updateBook, deleteBook, findBooksByTitle, findBooksByAuthor }

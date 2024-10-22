@@ -4,10 +4,13 @@ import bodyParser from "body-parser";
 import jsonwebtoken from "jsonwebtoken";
 import sequelize from './db/databaseConnection.js'
 import userRouter from "./routes/userRoutes.js";
-import bookRouter from "./routes/booksRoutes.js";
+import bookRouter from "./routes/bookRoutes.js";
+import categoryRouter from "./routes/categoryRoutes.js";
 import genreRouter from "./routes/genreRoutes.js";
+import authorRouter from "./routes/authorRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import wishlistRouter from "./routes/wishlistRoutes.js";
+
 
 const app = express();
 dotenv.config();
@@ -17,19 +20,20 @@ app.use(express.json());
 app.use(bodyParser.json())
 
 sequelize.sync(
-    // {force: true} //принудительное пересоздание таблиц
+    {force: true} //принудительное пересоздание таблиц
 )
 .then(()=>console.log("Database connected"))
 
 app.use('/users', userRouter)
 app.use('/books', bookRouter)
+app.use('/categories', categoryRouter)
 app.use('/genres', genreRouter)
+app.use('/authors', authorRouter)
 app.use('/orders', orderRouter)
 app.use('/wishlists', wishlistRouter)
 
-
 app.get("/", ((req, res) => {
-    res.send("Let's start")
+    res.send("Home page")
 }))
 
 app.listen(PORT || 3001, ((error) => {

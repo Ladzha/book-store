@@ -1,5 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/databaseConnection.js'
+import authorModel from './authorModel.js';
+import genreModel from './genreModel.js';
 
 const bookModel = sequelize.define("Book", {
     title: {
@@ -10,25 +12,35 @@ const bookModel = sequelize.define("Book", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    price: {
-        type: DataTypes.NUMBER,
-        allowNull: false,
-        min: 0
-    },
-    genre: {
-        type: []
-    },
     description: {
         type: DataTypes.STRING
+    },
+    pages: {
+        type: DataTypes.INTEGER,
+        min: 0,
+        defaultValue: 0
+    },
+    genre: {
+        type: [DataTypes.STRING],
+        defaultValue: "Genre not specified"
+    },
+    publishedAt: {
+        type: DataTypes.INTEGER
+    },
+    price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        min: 0,
+        defaultValue: 0.00
     },
     stock: {
         type: DataTypes.STRING,
         min: 0
-    },
-    createdAt: {
-        type: DataTypes.DATE
     }
-
 })
+
+// bookModel.hasMany(authorModel)
+// bookModel.hasMany(genreModel)
+
 
 export default bookModel

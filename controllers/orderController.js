@@ -14,7 +14,7 @@ const getAllOrders = async (req, res) => {
 const getOrderById = async (req, res) => {
     try {
         const id = req.params.id
-        if(!id) return errorHandler(res, 404, "ID not found")
+        if(!id) return errorHandler(res, 400, "Invalid ID")
         const order = await orderModel.findByPk(id)
         if(!order) return errorHandler(res, 404, `Order with ${id} not found`)
         res.status(200).json(order)
@@ -39,15 +39,25 @@ const createOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
     try {
-        
+        const id = req.params.id
+        if(!id) return errorHandler(res, 400, "Invalid ID")
+        const data = req.body
+        if(!data) return errorHandler(res, 400, "Invalid data")
+        await orderModel.update(data, {where: {id : id}})
+        const updatedOrder = await orderModel.findOne(data, {where: {id : id}})
+        if(!updatedOrder) return errorHandler(res, 404, "Order not found")
+        res.status(200).json({
+            message: `Order with ID: ${id} successfully updated.`, 
+            order: updatedOrder}); 
     } catch (error) {
-        
-    }
+        errorHandler(res, 400, "Failed to update order")
+    } 
 }
 
 const deleteOrder = async (req, res) => {
     try {
         const id = req.params.id
+        if(!id) return errorHandler(res, 400, "Invalid ID")
         const deletedOrder = orderModel.destroy({where: {id: id}})
         res.status(200).json({
             message: `Order with ID: ${id} successfully deleted.`, 
