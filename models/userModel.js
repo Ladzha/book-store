@@ -26,9 +26,9 @@ const userModel = sequelize.define("User", {
 })
 
 userModel.hasOne(wishlistModel)
-userModel.hasMany(orderModel)
-wishlistModel.belongsTo(userModel)
-orderModel.belongsTo(userModel)
+// userModel.hasMany(orderModel)
+// wishlistModel.belongsTo(userModel)
+// orderModel.belongsTo(userModel)
 
 
 export default userModel

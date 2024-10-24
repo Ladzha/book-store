@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(bodyParser.json())
 
 sequelize.sync(
-    {force: true} //принудительное пересоздание таблиц
+    // {force: true} //принудительное пересоздание таблиц
 )
 .then(()=>console.log("Database connected"))
 
@@ -31,6 +31,7 @@ app.use('/genres', genreRouter)
 app.use('/authors', authorRouter)
 app.use('/orders', orderRouter)
 app.use('/wishlists', wishlistRouter)
+
 
 app.get("/", ((req, res) => {
     res.send("Home page")

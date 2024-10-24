@@ -1,5 +1,8 @@
 import userModel from "../models/userModel.js";
 import errorHandler from "../config/errorHandler.js";
+import bcrypt from "bcrypt";
+import { validationResult } from "express-validator";
+
 
 const getAllUsers = async (req, res) => {
     try {
@@ -25,9 +28,19 @@ const getUserById = async (req, res) => {
 
 const createUser = async(req, res) => {
     try {
-        const data = req.body
-        if(!data) return errorHandler(400, "Invalid data")
-        const newUser = await userModel.create(data)
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return errorHandler(res, 400, `Invalid data ${errors}`)
+        }
+        const {firstName, lastName, email, password} = req.body      
+        if(!firstName || !lastName || !email || !password ) return errorHandler(res, 400, "Invalid data")
+        const candidate = await userModel.findOne({where: {email: email}})
+        if(candidate) {
+            return errorHandler(res, 400, `User with email ${email} already exist`)
+        }   
+        const hashPassword = bcrypt.hashSync(password, 5)
+        const newUser = await userModel.create({firstName, lastName, email, password: hashPassword})
+        
         res.status(201).json({
             message: "New user successfully created",
             newUser: newUser
@@ -68,7 +81,33 @@ const deleteUser = async(req, res) => {
     }
 }
 
-export default { getAllUsers, getUserById, createUser, updateUser, deleteUser }
+
+const login = async(req, res) => {
+    try {
+        const {email, password} = req.body    
+        if(!email || !password ) return errorHandler(res, 400, "Invalid data")
+        const user = await userModel.findOne({where: {email: email}})
+        if(!user) {
+            return errorHandler(res, 400, `User with email ${email} doesn't exist`)
+        }   
+        const validPassword = bcrypt.compare(password, user.password, 
+        //     function(error, result) {
+        //     error ? console.log(error) : console.log(result)
+        // }
+    )
+
+        if(!validPassword) return errorHandler(res, 400, "Incorrect password")
+        
+        res.status(200).json({
+            message: `Welcome ${user.firstName}`,
+        })
+    } catch (error) {
+        errorHandler(res, 500, "Failed to login")
+    }
+}
+
+
+export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, login }
 
 
 
