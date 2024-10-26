@@ -1,0 +1,36 @@
+{
+    "title": "Harry Potter and the Philosopher's Stone",
+    "authorId": 1
+    "description": "A young boy discovers he's a wizard and attends Hogwarts.",
+    "pages": 223,
+    "publishedAt": 1997,
+    "price": 19.99,
+    "stock": 150
+}
+
+
+{
+    "userId": 1
+}
+
+{
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "email": "alice.johnson@example.com",
+    "password": "securePass123"
+}
+
+{
+    "name": "J.K. Rowling",
+}
+
+{
+    "name": "Fiction"
+}
+
+{
+    "name": "Non-Fiction"
+}
+{
+    "name": "Children"
+}
