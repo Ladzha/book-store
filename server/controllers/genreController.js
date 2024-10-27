@@ -16,7 +16,7 @@ const getGenreById = async (req, res) => {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const genre = await genreModel.findByPk(id)
-        if(!genre) return errorHandler(res, 404, `Genre with ${id} not found`) 
+        if(!genre) return errorHandler(res, 404, `Genre with ID ${id} not found`) 
         res.status(200).json(genre)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch genre")

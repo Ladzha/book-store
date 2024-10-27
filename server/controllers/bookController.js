@@ -1,5 +1,6 @@
 import bookModel from "../models/bookModel.js";
 import errorHandler from "../config/errorHandler.js";
+import authorModel from "../models/authorModel.js";
 
 const getAllBooks = async (req, res) => {
     try {
@@ -16,7 +17,7 @@ const getBookById = async (req, res) => {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const book = await bookModel.findByPk(id)
-        if(!book) return errorHandler(res, 404, `Book with ${id} not found`)
+        if(!book) return errorHandler(res, 404, `Book with ID ${id} not found`)
         res.status(200).json(book)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch book")
@@ -25,6 +26,7 @@ const getBookById = async (req, res) => {
 
 const createBook = async (req, res) => {
     try {
+        // const author = await authorModel.findByPk()
         const data = req.body
         if(!data) return errorHandler(400, "Invalid data")
         const newBook = await bookModel.create(data)

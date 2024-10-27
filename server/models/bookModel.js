@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/databaseConnection.js'
+import authorModel from './authorModel.js';
 import genreModel from './genreModel.js';
 
 const bookModel = sequelize.define("Book", {
@@ -7,8 +8,8 @@ const bookModel = sequelize.define("Book", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    authorId: {
-        type: DataTypes.NUMBER,
+    author: {
+        type: DataTypes.STRING,
         allowNull: false
     },
     description: {
@@ -39,7 +40,10 @@ const bookModel = sequelize.define("Book", {
     }
 })
 
-// bookModel.belongsToMany(genreModel, { through: 'BookGenre' });
-// genreModel.belongsToMany(bookModel, { through: 'BookGenre' });
+bookModel.belongsToMany(authorModel, { through: 'BookAuthor' });
+authorModel.belongsToMany(bookModel, { through: 'BookAuthor' });
+
+bookModel.belongsToMany(genreModel, { through: 'BookGenre' });
+genreModel.belongsToMany(bookModel, { through: 'BookGenre' });
 
 export default bookModel

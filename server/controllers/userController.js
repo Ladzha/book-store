@@ -47,7 +47,7 @@ const getUserById = async (req, res) => {
         const id = req.params.id    
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const user = await userModel.findByPk(id)
-        if(!user) return errorHandler(res, 404, `User with ${id} not found`)
+        if(!user) return errorHandler(res, 404, `User with ID ${id} not found`)
         res.status(200).json(user)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch user")

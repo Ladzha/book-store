@@ -1,0 +1,242 @@
+{
+    "categories": [
+      {
+        "id": 1,
+        "name": "Fiction",
+        "genres": [
+          { "id": 1, "name": "Fantasy" },
+          { "id": 2, "name": "Historical Fiction" },
+          { "id": 3, "name": "Dystopian" }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Non-Fiction",
+        "genres": [
+          { "id": 4, "name": "History" },
+          { "id": 5, "name": "Self-Help" },
+          { "id": 6, "name": "Science" }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Children",
+        "genres": [
+          { "id": 7, "name": "Adventure" },
+          { "id": 8, "name": "Educational" },
+          { "id": 9, "name": "Inspirational" }
+        ]
+      }
+    ],
+    "authors": [
+      {
+        "name": "Harper Lee",
+        "bookAmount": 2,
+        "booksId": [1, 2]
+      },
+      {
+        "name": "George Orwell",
+        "bookAmount": 3,
+        "booksId": [3, 4, 5]
+      },
+      {
+        "name": "J.K. Rowling",
+        "bookAmount": 4,
+        "booksId": [6, 7, 8, 9]
+      },
+      {
+        "name": "Yuval Noah Harari",
+        "bookAmount": 2,
+        "booksId": [10, 11]
+      },
+      {
+        "name": "Dr. Seuss",
+        "bookAmount": 3,
+        "booksId": [12, 13, 14]
+      },
+      {
+        "name": "Malcolm Gladwell",
+        "bookAmount": 2,
+        "booksId": [15, 16]
+      }
+    ],
+    "books": [
+      {
+        "id": 1,
+        "title": "To Kill a Mockingbird",
+        "author": "Harper Lee",
+        "description": "A novel about racism and injustice in the Deep South.",
+        "pages": 281,
+        "genresId": [1],
+        "publishedAt": 1960,
+        "price": 9.99,
+        "stock": 34
+      },
+      {
+        "id": 2,
+        "title": "Go Set a Watchman",
+        "author": "Harper Lee",
+        "description": "The controversial sequel to 'To Kill a Mockingbird'.",
+        "pages": 278,
+        "genresId": [1],
+        "publishedAt": 2015,
+        "price": 12.99,
+        "stock": 12
+      },
+      {
+        "id": 3,
+        "title": "1984",
+        "author": "George Orwell",
+        "description": "A dystopian novel about a totalitarian regime.",
+        "pages": 328,
+        "genresId": [2],
+        "publishedAt": 1949,
+        "price": 10.99,
+        "stock": 20
+      },
+      {
+        "id": 4,
+        "title": "Animal Farm",
+        "author": "George Orwell",
+        "description": "A political satire about farm animals.",
+        "pages": 112,
+        "genresId": [2],
+        "publishedAt": 1945,
+        "price": 6.99,
+        "stock": 45
+      },
+      {
+        "id": 5,
+        "title": "Homage to Catalonia",
+        "author": "George Orwell",
+        "description": "Orwell's account of the Spanish Civil War.",
+        "pages": 232,
+        "genresId": [4],
+        "publishedAt": 1938,
+        "price": 8.99,
+        "stock": 15
+      },
+      {
+        "id": 6,
+        "title": "Harry Potter and the Philosopher's Stone",
+        "author": "J.K. Rowling",
+        "description": "The first book in the Harry Potter series.",
+        "pages": 223,
+        "genresId": [3],
+        "publishedAt": 1997,
+        "price": 14.99,
+        "stock": 60
+      },
+      {
+        "id": 7,
+        "title": "Harry Potter and the Chamber of Secrets",
+        "author": "J.K. Rowling",
+        "description": "The second book in the Harry Potter series.",
+        "pages": 251,
+        "genresId": [3],
+        "publishedAt": 1998,
+        "price": 14.99,
+        "stock": 60
+      },
+      {
+        "id": 8,
+        "title": "Harry Potter and the Prisoner of Azkaban",
+        "author": "J.K. Rowling",
+        "description": "The third book in the Harry Potter series.",
+        "pages": 317,
+        "genresId": [3],
+        "publishedAt": 1999,
+        "price": 16.99,
+        "stock": 50
+      },
+      {
+        "id": 9,
+        "title": "Harry Potter and the Goblet of Fire",
+        "author": "J.K. Rowling",
+        "description": "The fourth book in the Harry Potter series.",
+        "pages": 636,
+        "genresId": [3],
+        "publishedAt": 2000,
+        "price": 18.99,
+        "stock": 55
+      },
+      {
+        "id": 10,
+        "title": "Sapiens: A Brief History of Humankind",
+        "author": "Yuval Noah Harari",
+        "description": "An exploration of the history of humanity.",
+        "pages": 443,
+        "genresId": [4, 6],
+        "publishedAt": 2011,
+        "price": 19.99,
+        "stock": 25
+      },
+      {
+        "id": 11,
+        "title": "Homo Deus: A Brief History of Tomorrow",
+        "author": "Yuval Noah Harari",
+        "description": "A look into the future of humanity.",
+        "pages": 450,
+        "genresId": [4, 6],
+        "publishedAt": 2016,
+        "price": 20.99,
+        "stock": 25
+      },
+      {
+        "id": 12,
+        "title": "The Cat in the Hat",
+        "author": "Dr. Seuss",
+        "description": "A classic children's book about a mischievous cat.",
+        "pages": 61,
+        "genresId": [7],
+        "publishedAt": 1957,
+        "price": 5.99,
+        "stock": 80
+      },
+      {
+        "id": 13,
+        "title": "Green Eggs and Ham",
+        "author": "Dr. Seuss",
+        "description": "A whimsical story for children.",
+        "pages": 62,
+        "genresId": [7],
+        "publishedAt": 1960,
+        "price": 5.99,
+        "stock": 70
+      },
+      {
+        "id": 14,
+        "title": "Oh, the Places You'll Go!",
+        "author": "Dr. Seuss",
+        "description": "An inspirational book for children.",
+        "pages": 56,
+        "genresId": [9],
+        "publishedAt": 1990,
+        "price": 6.99,
+        "stock": 60
+      },
+      {
+        "id": 15,
+        "title": "The Tipping Point",
+        "author": "Malcolm Gladwell",
+        "description": "An analysis of social change.",
+        "pages": 301,
+        "genresId": [5],
+        "publishedAt": 2000,
+        "price": 11.99,
+        "stock": 30
+      },
+      {
+        "id": 16,
+        "title": "Outliers",
+        "author": "Malcolm Gladwell",
+        "description": "A book on the factors that contribute to high levels of success.",
+        "pages": 309,
+        "genresId": [5],
+        "publishedAt": 2008,
+        "price": 12.99,
+        "stock": 30
+      }
+    ]
+  }
+  

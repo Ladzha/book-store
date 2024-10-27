@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 import jsonwebtoken from "jsonwebtoken";
 import sequelize from './db/databaseConnection.js'
 import userRouter from "./routes/userRoutes.js";
@@ -23,7 +24,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 sequelize.sync(
+    // {alter: true} //принудительное пересоздание таблиц
     // {force: true} //принудительное пересоздание таблиц
+
 )
 .then(()=>console.log("Database connected"))
 
@@ -36,8 +39,8 @@ app.use('/orders', orderRouter)
 app.use('/wishlists', wishlistRouter)
 
 
-app.get("/", ((req, res) => {
-    res.send("Home page")
+app.get("/views/books", ((req, res) => {
+    res.sendFile(path.join(__dirname, "..", "views", "books.html"))
 }))
 
 app.listen(PORT || 3001, ((error) => {

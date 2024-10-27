@@ -19,7 +19,7 @@ const getOrderById = async (req, res) => {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const order = await orderModel.findByPk(id)
-        if(!order) return errorHandler(res, 404, `Order with ${id} not found`)
+        if(!order) return errorHandler(res, 404, `Order with ID ${id} not found`)
         res.status(200).json(order)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch order")

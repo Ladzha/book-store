@@ -17,7 +17,7 @@ const getCategoryById = async (req, res) => {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const category = await categoryModel.findByPk(id)
-        if(!category) return errorHandler(res, 404, `Category with ${id} not found`) 
+        if(!category) return errorHandler(res, 404, `Category with ID ${id} not found`) 
         res.status(200).json(category)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch category")

@@ -16,7 +16,7 @@ const getAuthorById = async (req, res) => {
         const id = req.params.id    
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const author = await authorModel.findByPk(id)
-        if(!author) return errorHandler(res, 404, `Author with ${id} not found`)
+        if(!author) return errorHandler(res, 404, `Author with ID ${id} not found`)
         res.status(200).json(author)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch author")

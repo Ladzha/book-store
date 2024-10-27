@@ -18,7 +18,7 @@ const getWishlistById = async (req, res) => {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
         const wishlist = wishlistModel.findByPk(id)
-        if(!wishlist) return errorHandler(res, 404, `Wishlist with ${id} not found`)
+        if(!wishlist) return errorHandler(res, 404, `Wishlist with ID ${id} not found`)
         res.status(200).json(wishlist)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch wishlist")
