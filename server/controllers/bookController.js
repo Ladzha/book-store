@@ -1,10 +1,27 @@
 import bookModel from "../models/bookModel.js";
 import errorHandler from "../config/errorHandler.js";
 import authorModel from "../models/authorModel.js";
+import genreModel from "../models/genreModel.js";
 
 const getAllBooks = async (req, res) => {
     try {
-        const books = await bookModel.findAll()
+        const books = await bookModel.findAll({
+            include: [
+                {
+                    model: genreModel,
+                    through: {
+                        attributes: []
+                    },
+                    attributes: ['name']
+                },
+                {
+                    model: authorModel,
+                    through: {
+                        attributes: []
+                    },
+                    attributes: ['name']
+                }
+            ]})
         if(!books.length) return errorHandler(res, 404, "Books not found")
         res.status(200).json(books)
     } catch (error) {

@@ -4,7 +4,13 @@ import genreModel from "../models/genreModel.js";
 
 const getAllCategories = async (req, res) => {
     try {
-        const categories = await categoryModel.findAll()
+        const categories = await categoryModel.findAll({
+                include: [
+                    {
+                        model: genreModel,
+                        attributes: ['name']
+                    }
+                ]})
         if(!categories.length) return errorHandler(res, 404, "Categories not found")
         res.status(200).json(categories)
     } catch (error) {
@@ -16,7 +22,13 @@ const getCategoryById = async (req, res) => {
     try {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
-        const category = await categoryModel.findByPk(id)
+        const category = await categoryModel.findByPk(id, {
+            include: [
+                {
+                    model: genreModel,
+                    attributes: ['name']
+                }
+            ]})
         if(!category) return errorHandler(res, 404, `Category with ID ${id} not found`) 
         res.status(200).json(category)
     } catch (error) {

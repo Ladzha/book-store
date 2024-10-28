@@ -11,12 +11,19 @@ const SECRET = process.env.SECRET
 
 function authenticationToken(req, res, next){
     try {
-        const token = req.headers.authorization.split('')[1]
+        console.log("proverka");
+        
+        const headersAuth = req.headers['authorization']
+        const token = headersAuth.split(' ')[1]
+        console.log("token", token);
+        
         if(!token){
-            errorHandler(res, 403, "Not authorized")
+            errorHandler(res, 403, "Token not found")
         }
         const decodedData = jsonwebtoken.verify(token, SECRET) 
-        req.body = decodedData       
+        req.body = decodedData
+        console.log(decodedData);
+        
         next()
     } catch (error) {
         errorHandler(res, 403, "Not authorized")
@@ -60,7 +67,6 @@ const createUser = async(req, res) => {
         
         if(!errors.isEmpty()){
             return res.status(400).json( {message: "Registration error", errors})
-            // return errorHandler(res, 400, `Registration error: ${errors}`)
         }
         const {firstName, lastName, email, password} = req.body      
         if(!firstName || !lastName || !email || !password ) return errorHandler(res, 400, "Invalid data")
@@ -136,5 +142,17 @@ const login = async(req, res) => {
     }
 }
 
+const getProfileByUserId = async (req, res) => {
+    try {
+        const id = req.params.id    
+        if(!id) return errorHandler(res, 400, "Invalid ID")
+        const user = await userModel.findByPk(id)
+        if(!user) return errorHandler(res, 404, `User with ID ${id} not found`)
+        res.status(200).json(user)
+    } catch (error) {
+        errorHandler(res, 500, "Failed to fetch user")
+    }
+}
 
-export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, authenticationToken }
+
+export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, getProfileByUserId, authenticationToken }

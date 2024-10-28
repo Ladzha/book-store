@@ -1,9 +1,18 @@
 import genreModel from "../models/genreModel.js";
 import errorHandler from "../config/errorHandler.js";
+import bookModel from "../models/bookModel.js";
 
 const getAllGenres = async (req, res) => {
     try {
-        const genres = await genreModel.findAll()
+        const genres = await genreModel.findAll({
+            include: [
+                {
+                    model: bookModel,
+                    through: {attributes: []},
+                    attributes: ['title']
+                },
+            ]
+        })
         if(!genres.length) return errorHandler(res, 404, "Genres not found")
         res.status(200).json(genres)
     } catch (error) {
@@ -15,7 +24,15 @@ const getGenreById = async (req, res) => {
     try {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
-        const genre = await genreModel.findByPk(id)
+        const genre = await genreModel.findByPk(id, {
+            include: [
+                {
+                    model: bookModel,
+                    through: {attributes: []},
+                    attributes: ['title']
+                },
+            ]
+        })
         if(!genre) return errorHandler(res, 404, `Genre with ID ${id} not found`) 
         res.status(200).json(genre)
     } catch (error) {
