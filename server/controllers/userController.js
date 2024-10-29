@@ -11,8 +11,6 @@ const SECRET = process.env.SECRET
 
 function authenticationToken(req, res, next){
     try {
-        console.log("proverka");
-        
         const headersAuth = req.headers['authorization']
         const token = headersAuth.split(' ')[1]
         console.log("token", token);
@@ -37,6 +35,15 @@ function generateAccessToken(id, role){
     }
 
     return jsonwebtoken.sign(payload, SECRET, {expiresIn: "1h"})
+}
+
+function generateRefreshToken(id, role){
+    const payload = {
+        id,
+        role
+    }
+
+    return jsonwebtoken.sign(payload, SECRET, {expiresIn: "24h"})
 }
 
 const getAllUsers = async (req, res) => {
@@ -132,6 +139,8 @@ const login = async(req, res) => {
         
         const token = generateAccessToken(user.id, user.role)
 
+        res.cookie("accessToken", token )
+
         res.status(200).json({
             message: `Welcome ${user.firstName}`,
             token: token
@@ -139,6 +148,14 @@ const login = async(req, res) => {
 
     } catch (error) {
         errorHandler(res, 400, "Failed to login")
+    }
+}
+
+const logout = async(req, res) => {
+    try {
+        res.clearCookie("accessToken")
+    } catch (error) {
+        errorHandler(res, 400, "Failed to logout")
     }
 }
 
