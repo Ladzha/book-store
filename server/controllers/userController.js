@@ -33,7 +33,6 @@ function generateAccessToken(id, role){
         id,
         role
     }
-
     return jsonwebtoken.sign(payload, SECRET, {expiresIn: "1h"})
 }
 
@@ -42,7 +41,6 @@ function generateRefreshToken(id, role){
         id,
         role
     }
-
     return jsonwebtoken.sign(payload, SECRET, {expiresIn: "24h"})
 }
 
@@ -140,6 +138,9 @@ const login = async(req, res) => {
         const token = generateAccessToken(user.id, user.role)
 
         res.cookie("accessToken", token )
+        console.log(req.cookies.accessToken);
+        
+        
 
         res.status(200).json({
             message: `Welcome ${user.firstName}`,
@@ -154,6 +155,9 @@ const login = async(req, res) => {
 const logout = async(req, res) => {
     try {
         res.clearCookie("accessToken")
+        res.status(200).json({
+            message: 'You have successfully logged out!',
+        })
     } catch (error) {
         errorHandler(res, 400, "Failed to logout")
     }

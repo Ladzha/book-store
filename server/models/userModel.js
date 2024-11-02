@@ -2,12 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../db/databaseConnection.js'
 
 const userModel = sequelize.define("User", {
-    firstName: {
-        type: DataTypes.STRING,
-        min: 2,
-        allowNull: false,
-    },
-    lastName: {
+    name: {
         type: DataTypes.STRING,
         min: 2,
         allowNull: false,

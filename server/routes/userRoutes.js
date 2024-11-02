@@ -14,8 +14,12 @@ const userRouter = express.Router();
 
 userRouter.use(express.static(path.join(__dirname, "public")));
 
-userRouter.get('/', authenticationToken, getAllUsers)
-userRouter.get('/profile/:id', authenticationToken, getProfileByUserId)
+userRouter.get('/',
+    // authenticationToken, 
+    getAllUsers)
+userRouter.get('/profile/:id', 
+    // authenticationToken,
+     getProfileByUserId)
 
 
 userRouter.route('/')

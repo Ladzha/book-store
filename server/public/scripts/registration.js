@@ -2,11 +2,8 @@ const registrationForm  = document.getElementById("registration-form")
 
 function submitRegisterForm(event){
     event.preventDefault()
-
         const formData = new FormData(registrationForm);
-
         const data = {}
-
         formData.forEach((value, key) => {
         data[key] = value;
         });

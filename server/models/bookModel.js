@@ -4,7 +4,7 @@ import authorModel from './authorModel.js';
 import genreModel from './genreModel.js';
 
 const bookModel = sequelize.define("Book", {
-    title: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
