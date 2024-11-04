@@ -12,21 +12,35 @@ const SECRET = process.env.SECRET
 function authenticationToken(req, res, next){
     try {
         const headersAuth = req.headers['authorization']
-        const token = headersAuth.split(' ')[1]
-        console.log("token", token);
-        
+        const token = headersAuth.split(' ')[1]        
         if(!token){
             errorHandler(res, 403, "Token not found")
         }
         const decodedData = jsonwebtoken.verify(token, SECRET) 
-        req.body = decodedData
-        console.log(decodedData);
-        
+        req.body = decodedData        
         next()
     } catch (error) {
         errorHandler(res, 403, "Not authorized")
     }
 }
+
+
+function refreshAccessToken(req, res, next){
+    try {
+        const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) return res.sendStatus(401);
+
+        const decodedData = jsonwebtoken.verify(token, SECRET, (err, user) => {
+            if (err) return res.sendStatus(403)
+        })
+
+        const accessToken = generateAccessToken(user.id, user)
+        
+    } catch (error) {
+        errorHandler(res, 403, "Not authorized")
+    }
+}
+
 
 function generateAccessToken(id, role){
     const payload = {
@@ -73,14 +87,16 @@ const createUser = async(req, res) => {
         if(!errors.isEmpty()){
             return res.status(400).json( {message: "Registration error", errors})
         }
-        const {firstName, lastName, email, password} = req.body      
-        if(!firstName || !lastName || !email || !password ) return errorHandler(res, 400, "Invalid data")
+        let {name, email, password} = req.body
+        if(!name || !email || !password ) return errorHandler(res, 400, "Invalid data")
+        email = email.toLowerCase();
+
         const candidate = await userModel.findOne({where: {email: email}})
         if(candidate) {
             return errorHandler(res, 400, `User with email ${email} already exist`)
         }   
         const hashPassword = bcrypt.hashSync(password, 5)
-        const newUser = await userModel.create({firstName, lastName, email, password: hashPassword})
+        const newUser = await userModel.create({name, email, password: hashPassword})
         
         res.status(201).json({
             message: "New user successfully created",
@@ -112,21 +128,21 @@ const deleteUser = async(req, res) => {
     try {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
-        const deletedUser = userModel.destroy({where: {id: id}})
+        await userModel.destroy({where: {id: id}})
         res.status(200).json({
             message: `User with ID: ${id} successfully deleted.`, 
-            deletedUser: deletedUser
         }); 
     } catch (error) {
         errorHandler(res, 500, "Failed to delete user")
     }
 }
 
-
 const login = async(req, res) => {
     try {
-        const {email, password} = req.body    
+        let {email, password} = req.body    
         if(!email || !password ) return errorHandler(res, 400, "Invalid data")
+        email = email.toLowerCase();
+
         const user = await userModel.findOne({where: {email: email}})
         if(!user) {
             return errorHandler(res, 400, `User with email ${email} doesn't exist`)
@@ -135,16 +151,18 @@ const login = async(req, res) => {
 
         if(!validPassword) return errorHandler(res, 400, "Incorrect password")
         
-        const token = generateAccessToken(user.id, user.role)
+        const accessToken = generateAccessToken(user.id, user.role)
+        const refreshToken = generateRefreshToken(user.id, user.role)
 
-        res.cookie("accessToken", token )
-        console.log(req.cookies.accessToken);
-        
-        
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        })
 
         res.status(200).json({
-            message: `Welcome ${user.firstName}`,
-            token: token
+            message: `Welcome ${user.name}`,
+            accessToken: accessToken,
+            refreshToken: refreshToken
         })
 
     } catch (error) {
@@ -154,7 +172,7 @@ const login = async(req, res) => {
 
 const logout = async(req, res) => {
     try {
-        res.clearCookie("accessToken")
+        res.clearCookie("refreshToken")
         res.status(200).json({
             message: 'You have successfully logged out!',
         })
@@ -176,4 +194,4 @@ const getProfileByUserId = async (req, res) => {
 }
 
 
-export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, getProfileByUserId, authenticationToken }
+export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, getProfileByUserId, authenticationToken, refreshAccessToken }

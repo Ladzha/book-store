@@ -3,7 +3,6 @@ import errorHandler from "../config/errorHandler.js";
 import userModel from "../models/userModel.js";
 import bookModel from "../models/bookModel.js";
 
-
 const getAllOrders = async (req, res) => {
     try {
         const orders = await orderModel.findAll()
@@ -49,7 +48,7 @@ const updateOrder = async (req, res) => {
         const data = req.body
         if(!data) return errorHandler(res, 400, "Invalid data")
         await orderModel.update(data, {where: {id : id}})
-        const updatedOrder = await orderModel.findOne(data, {where: {id : id}})
+        const updatedOrder = await orderModel.findByPk(id)
         if(!updatedOrder) return errorHandler(res, 404, "Order not found")
         res.status(200).json({
             message: `Order with ID: ${id} successfully updated.`, 
@@ -64,22 +63,23 @@ const addBookToOrder = async (req, res) => {
         const id = req.params.id
         if(!id) return errorHandler(res, 400, "Invalid ID")
 
-        const bookId = req.body.userId
+        const bookId = req.body.bookId
         if(!bookId) return errorHandler(res, 400, "Invalid book ID")            
         const book = await bookModel.findByPk(bookId)
         if(!book) return errorHandler(res, 404, `Book with ${bookId} not found`)
         
         const updatedOrder = await orderModel.findByPk(id)
+        if (!updatedOrder) return errorHandler(res, 404, `Order with ID ${id} not found`);
         if(updatedOrder.booksId.includes(bookId)) return errorHandler(res, 400, `Book with id ${bookId} is already in the order`)
 
         updatedOrder.booksId.push(bookId)
-        updatedOrder.itemAmount = updatedOrder.itemAmount + 1;
-        updatedOrder.totalPrice = updatedOrder.totalPrice + book.price;
+        updatedOrder.itemAmount +=1;
+        updatedOrder.totalPrice += book.price;
 
-        updatedOrder.save()
+        await updatedOrder.save()
 
         res.status(200).json({
-            message: `Order with ID: ${id} successfully updated. Book ${book.title} with id ${bookId} added to wishlist`, 
+            message: `Order with ID: ${id} successfully updated. Book ${book.name} with id ${bookId} added to wishlist`, 
             book: updatedOrder}); 
 
     } catch (error) {

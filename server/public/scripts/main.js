@@ -81,6 +81,7 @@ async function deleteElementById(elements, elementId){
 async function displayElementsList(elements){
     dataBlock.innerHTML = null
     const elementsData = await fetchAllElements(elements)
+    if(!elementsData) return
     if(elementsData){
         elementsData.forEach((element) =>{
             createElementCard(element)
@@ -89,15 +90,13 @@ async function displayElementsList(elements){
     createButton("Add", dataBlock, handleAdd)
 }
 
-function handleDelete(){
-    deleteElementById("Categories", 1)
+function handleDelete(elements, id){
+    deleteElementById(elements, id)
     console.log("DELETED");
-    
 }
 
 function handleUpdate(){
     console.log("UPDATE");
-    
 }
 
 function handleAdd(){

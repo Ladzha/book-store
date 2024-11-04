@@ -11,13 +11,7 @@ const authorModel = sequelize.define("Author", {
         type: DataTypes.INTEGER,
         min: 0,
         defaultValue: 0
-    }, 
-    booksId: {
-        type: DataTypes.JSON,
-        allowNull: false, 
-        defaultValue: []
     }
 })
-
 
 export default authorModel

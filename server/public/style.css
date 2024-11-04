@@ -30,7 +30,6 @@ p{
 
 .buttonsBlock, .dataBlock{
     display: flex;
-    background-color: rgb(238, 243, 243);
     flex-direction: column;
     justify-content: center;
     align-content: center;

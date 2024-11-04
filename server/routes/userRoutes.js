@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-const { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, getProfileByUserId, authenticationToken } = userController;
+const { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, getProfileByUserId, authenticationToken, refreshAccessToken } = userController;
 
 const userRouter = express.Router();
 
@@ -19,16 +19,16 @@ userRouter.get('/',
     getAllUsers)
 userRouter.get('/profile/:id', 
     // authenticationToken,
-     getProfileByUserId)
+    getProfileByUserId)
 
 
 userRouter.route('/')
 .post(createUser) 
 
 userRouter.post('/registration', [
-    check("firstName", "First name field can't be empty").notEmpty(),
-    check("lastName", "Last name field can't be empty").notEmpty(),
-    check("email", "Email field can't be empty").notEmpty(),
+    check("name", "Name field can't be empty").notEmpty(),
+    check("email", "Email field can't be empty").notEmpty()
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).withMessage("Email format is invalid"),
     check("password", "Password must be 6-15 symbols").notEmpty().isLength({min: 6, max: 15}),
 ], createUser)
 
