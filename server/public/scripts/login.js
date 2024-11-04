@@ -21,6 +21,8 @@ function submitLoginForm(event){
         .then((response) => response.json())
         .then((data)=>{
             console.log("Response data:", data);
+            loginForm.reset();
+
         })
         .catch((error)=>{
             console.log("Error: ", error);

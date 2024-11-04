@@ -18,6 +18,7 @@ function submitRegisterForm(event){
         .then((response) => response.json())
         .then((data)=>{
             console.log("Response data:", data);
+            registrationForm.reset();
         })
         .catch((error)=>{
             console.log("Error: ", error);

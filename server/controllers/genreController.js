@@ -1,7 +1,6 @@
 import genreModel from "../models/genreModel.js";
 import errorHandler from "../config/errorHandler.js";
 import bookModel from "../models/bookModel.js";
-import authorModel from "../models/authorModel.js";
 import categoryModel from "../models/categoryModel.js";
 
 const getAllGenres = async (req, res) => {

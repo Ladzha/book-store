@@ -34,9 +34,20 @@ applyAssociations()
 sequelize.sync(
     // {alter: true} //принудительное пересоздание таблиц
     // {force: true} //принудительное пересоздание таблиц
-
 )
 .then(()=>console.log("Database connected"))
+
+app.get("/", ((req, res) => {
+    res.sendFile(path.join(__dirname, "..", "server/public/views", "home.html"))
+}))
+
+app.get("/registration", ((req, res) => {
+    res.sendFile(path.join(__dirname, "..", "server/public/views", "register.html"))
+}))
+
+app.get("/login", ((req, res) => {
+    res.sendFile(path.join(__dirname, "..", "server/public/views", "login.html"))
+}))
 
 app.use('/users', userRouter)
 app.use('/books', bookRouter)
