@@ -40,6 +40,9 @@ export default function applyAssociations(){
         foreignKey: 'userId'
     });
 
+    orderModel.belongsToMany(bookModel, { through: 'OrderBooks' });
+    bookModel.belongsToMany(orderModel, { through: 'OrderBooks' });
+
     wishlistModel.belongsToMany(bookModel, { through: 'WishlistBooks' });
     bookModel.belongsToMany(wishlistModel, { through: 'WishlistBooks' });
 }

@@ -17,12 +17,13 @@ const getAllGenres = async (req, res) => {
 
 const getGenreById = async (req, res) => {
     try {
-        const id = req.params.id
-        if(!id) return errorHandler(res, 400, "Invalid ID")
-        const genre = await genreModel.findByPk(id, {
+        const genreId = req.params.id
+        if(!genreId) return errorHandler(res, 400, "Invalid ID")
+        const genre = await genreModel.findByPk(genreId, {
             include: [{model: bookModel, through: {attributes: []}, attributes: ['name', 'author']}]
         })
-        if(!genre) return errorHandler(res, 404, `Genre with ID ${id} not found`) 
+
+        if(!genre) return errorHandler(res, 404, `Genre with ID ${genreId} not found`) 
         res.status(200).json(genre)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch genre")

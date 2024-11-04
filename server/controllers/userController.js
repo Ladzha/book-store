@@ -4,6 +4,8 @@ import jsonwebtoken from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import userModel from "../models/userModel.js";
 import errorHandler from "../config/errorHandler.js";
+import wishlistModel from "../models/wishlistModel.js";
+import orderModel from "../models/orderModel.js";
 
 dotenv.config()
 
@@ -72,7 +74,9 @@ const getUserById = async (req, res) => {
     try {
         const id = req.params.id    
         if(!id) return errorHandler(res, 400, "Invalid ID")
-        const user = await userModel.findByPk(id)
+        const user = await userModel.findByPk(id, {
+            include: [{model: orderModel}, {model: wishlistModel}]
+        })
         if(!user) return errorHandler(res, 404, `User with ID ${id} not found`)
         res.status(200).json(user)
     } catch (error) {

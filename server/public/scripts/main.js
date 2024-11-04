@@ -87,7 +87,7 @@ async function displayElementsList(elements){
             createElementCard(element)
         })
     }
-    createButton("Add", dataBlock, handleAdd)
+    // createButton("Add", dataBlock, handleAdd)
 }
 
 function handleDelete(elements, id){
@@ -154,6 +154,6 @@ function createElementCard(element){
 
     dataBlock.appendChild(card)
 
-    createActionButtonBlock()
+    // createActionButtonBlock()
  
 }

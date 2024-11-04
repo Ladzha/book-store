@@ -2,10 +2,13 @@ import wishlistModel from "../models/wishlistModel.js";
 import userModel from "../models/userModel.js";
 import bookModel from "../models/bookModel.js";
 import errorHandler from "../config/errorHandler.js";
+import { where } from "sequelize";
 
 const getAllWishlists = async (req, res) => {
     try {
-        const wishlists = await wishlistModel.findAll()
+        const wishlists = await wishlistModel.findAll({
+            include: [{model: bookModel, through: {attributes: []}, attributes: ['name', 'author']}]
+        })
         if(!wishlists.length) return errorHandler(res, 404, "Wishlists not found")
         res.status(200).json(wishlists)
     } catch (error) {
@@ -15,10 +18,21 @@ const getAllWishlists = async (req, res) => {
 
 const getWishlistById = async (req, res) => {
     try {
-        const id = req.params.id
-        if(!id) return errorHandler(res, 400, "Invalid ID")
-        const wishlist = wishlistModel.findByPk(id)
-        if(!wishlist) return errorHandler(res, 404, `Wishlist with ID ${id} not found`)
+        const wishlistId = req.params.id
+        if(!wishlistId) return errorHandler(res, 400, "Invalid ID")
+            console.log(wishlistId);
+            
+        const wishlist = await wishlistModel.findByPk(wishlistId, {
+            include: [
+                {model: bookModel, through: {attributes: []}, attributes: ['name', 'author']},
+                {model: userModel}
+            ]
+        })
+
+        console.log(wishlist);
+        
+
+        if(!wishlist) return errorHandler(res, 404, `Wishlist with ID ${wishlistId} not found`)
         res.status(200).json(wishlist)
     } catch (error) {
         errorHandler(res, 500, "Failed to fetch wishlist")
@@ -27,13 +41,13 @@ const getWishlistById = async (req, res) => {
 
 const createWishlist = async (req, res) => {
     try {
-        const userId = req.body.userId
+        const {id : userId} = req.params
         if(!userId) return errorHandler(res, 400, "Invalid user ID")            
         const user = await userModel.findByPk(userId)
         if(!user) return errorHandler(res, 404, `User with ${userId} not found`)
         const newWishlist = await wishlistModel.create({userId: userId})
         res.status(201).json({
-            message: `New wishlist for user ${user.firstName} successfully created`,
+            message: `New wishlist for user ${user.name} successfully created`,
             newWishlist: newWishlist
         })    
     } catch (error) {
@@ -43,29 +57,26 @@ const createWishlist = async (req, res) => {
 
 const addBookToWishlist = async (req, res) => {
     try {
-        const id = req.params.id
-        if(!id) return errorHandler(res, 400, "Invalid ID")
-    
-        // const userId = req.body.userId
-        // if(!userId) return errorHandler(res, 400, "Invalid user ID")            
-        // const user = await userModel.findByPk(userId)
-        // if(!user) return errorHandler(res, 404, `User with ${userId} not found`)
+        const wishlistId = req.params.id
+        if(!wishlistId) return errorHandler(res, 400, "Invalid ID")
+            
+        const bookName = req.body.name
+        if(!bookName) return errorHandler(res, 400, "Invalid data")
 
-        const bookId = req.body.userId
-        if(!bookId) return errorHandler(res, 400, "Invalid book ID")            
-        const book = await bookModel.findByPk(bookId)
-        if(!book) return errorHandler(res, 404, `Book with ${bookId} not found`)
-        
-        const updatedWishlist = await wishlistModel.findByPk(id)
-        if(updatedWishlist.booksId.includes(bookId)) return errorHandler(res, 400, `Book with id ${bookId} is already in the wishlist`)
-        
-        updatedWishlist.booksId.push(bookId)
-        updatedWishlist.save()
+        const bookToAdd = await bookModel.findOne({where: {name: bookName}})
+        if (!bookToAdd) return errorHandler(res, 404, `Book with name "${bookName}" not found`);
+
+        const updatedWishlist = await wishlistModel.findByPk(wishlistId)
+        if (!updatedWishlist) return errorHandler(res, 404, `Wishlist with ID ${wishlistId} not found`);
+
+        await updatedWishlist.addBook(bookToAdd)
+        await bookToAdd.addWishlist(updatedWishlist)
 
         res.status(200).json({
-            message: `Wishlist with ID: ${id} successfully updated. Book ${book.title} with id ${bookId} added to wishlist`, 
-            book: updatedWishlist}); 
-
+            message: `Book ${bookName} successfully added to wishlist with ID ${wishlistId}.`, 
+            wishlist: updatedWishlist,
+            book: bookToAdd
+        }); 
     } catch (error) {
         errorHandler(res, 400, "Failed to update wishlist")
     } 

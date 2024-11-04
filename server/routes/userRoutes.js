@@ -7,7 +7,7 @@ const { getAllUsers, getUserById, createUser, updateUser, deleteUser, login, get
 const userRouter = express.Router();
 
 userRouter.get('/',
-    // authenticationToken, 
+    authenticationToken, 
     getAllUsers)
 userRouter.get('/profile/:id', 
     // authenticationToken,
